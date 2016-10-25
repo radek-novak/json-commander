@@ -7,6 +7,7 @@ import {
   PORTNAME,
   FORMATTED
 } from './constants'
+import expanderClick from './content/expanderClick'
 
 // var css = require('../content')
 let preTags = null
@@ -41,15 +42,18 @@ const main = (json) => {
   })
 
   controlsHooks.switcherRaw.addEventListener('change', (e) => {
-    console.log('switcherRaw', controlsHooks.inside)
     controlsHooks.inside.hidden = true
     document.querySelector('pre').hidden = false
   })
   controlsHooks.switcherFormatted.addEventListener('change', (e) => {
-    console.log('switcherFormatted', document.querySelector('pre'))
     controlsHooks.inside.hidden = false
     document.querySelector('pre').hidden = true
   })
+  document.addEventListener(
+    'click',
+    expanderClick,
+    false // No need to propogate down
+  )
 
   port.postMessage({
     type: SEND_JSON_STRING,
