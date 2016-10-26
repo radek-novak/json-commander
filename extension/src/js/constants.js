@@ -5,3 +5,4 @@ export const FORMATTED = 'FORMATTED'
 export const FORMATTING = 'FORMATTING'
 
 export const NOT_JSON = 'NOT_JSON'
+export const ERROR_JSONPATH = 'ERROR_JSONPATH'

@@ -143,6 +143,7 @@
 	var FORMATTING = exports.FORMATTING = 'FORMATTING';
 
 	var NOT_JSON = exports.NOT_JSON = 'NOT_JSON';
+	var ERROR_JSONPATH = exports.ERROR_JSONPATH = 'ERROR_JSONPATH';
 
 /***/ },
 

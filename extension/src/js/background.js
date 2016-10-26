@@ -6,7 +6,8 @@ import {
   PORTNAME,
   FORMATTED,
   NOT_JSON,
-  FORMATTING
+  FORMATTING,
+  ERROR_JSONPATH
 } from './constants'
 
 import jsonObjToHTML, {
@@ -29,16 +30,25 @@ chrome.runtime.onConnect.addListener(function(port) {
     if (msg.type === SEND_JSON_STRING) {
       var obj,
       text = msg.text ;
+      var parsedText;
 
       // Strip any leading garbage, such as a 'while(1);'
         var strippedText = text.substring( firstJSONCharIndex(text) ) ;
 
       try {
-        // console.log('json parse', JSON.parse(strippedText))
-        if (msg.inputJsonPath && msg.inputJsonPath.length > 0)
-          obj = jsonpath.query(JSON.parse(strippedText), msg.inputJsonPath);
-        else
-          obj = JSON.parse(strippedText)
+        parsedText = JSON.parse(strippedText)
+        try {
+          if (msg.inputJsonPath && msg.inputJsonPath.length > 0)
+            obj = jsonpath.query(parsedText, msg.inputJsonPath);
+          else
+            obj = JSON.parse(strippedText)
+        } catch (jsonpathError) {
+          console.error(jsonpathError)
+          port.postMessage({
+            type: ERROR_JSONPATH
+          })
+          return
+        }
         // console.log(obj)
         // obj = JSON.parse(strippedText);
         validJsonText = JSON.stringify(obj)

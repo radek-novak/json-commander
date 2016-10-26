@@ -74,13 +74,22 @@
 	    if (msg.type === _constants.SEND_JSON_STRING) {
 	      var obj,
 	          text = msg.text;
+	      var parsedText;
 
 	      // Strip any leading garbage, such as a 'while(1);'
 	      var strippedText = text.substring((0, _createHtml.firstJSONCharIndex)(text));
 
 	      try {
-	        // console.log('json parse', JSON.parse(strippedText))
-	        if (msg.inputJsonPath && msg.inputJsonPath.length > 0) obj = _jsonpath2.default.query(JSON.parse(strippedText), msg.inputJsonPath);else obj = JSON.parse(strippedText);
+	        parsedText = JSON.parse(strippedText);
+	        try {
+	          if (msg.inputJsonPath && msg.inputJsonPath.length > 0) obj = _jsonpath2.default.query(parsedText, msg.inputJsonPath);else obj = JSON.parse(strippedText);
+	        } catch (jsonpathError) {
+	          console.error(jsonpathError);
+	          port.postMessage({
+	            type: _constants.ERROR_JSONPATH
+	          });
+	          return;
+	        }
 	        // console.log(obj)
 	        // obj = JSON.parse(strippedText);
 	        validJsonText = JSON.stringify(obj);
@@ -14532,6 +14541,7 @@
 	var FORMATTING = exports.FORMATTING = 'FORMATTING';
 
 	var NOT_JSON = exports.NOT_JSON = 'NOT_JSON';
+	var ERROR_JSONPATH = exports.ERROR_JSONPATH = 'ERROR_JSONPATH';
 
 /***/ },
 /* 38 */
