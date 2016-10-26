@@ -4,7 +4,9 @@ import {
   MESSAGE,
   SEND_JSON_STRING,
   PORTNAME,
-  FORMATTED
+  FORMATTED,
+  NOT_JSON,
+  FORMATTING
 } from './constants'
 
 import jsonObjToHTML, {
@@ -49,7 +51,10 @@ chrome.runtime.onConnect.addListener(function(port) {
           // Find where the first paren is (and exit if none)
             var indexOfParen ;
             if ( ! (indexOfParen = text.indexOf('(') ) ) {
-              port.postMessage(['NOT JSON', 'no opening parenthesis']) ;
+              port.postMessage({
+                type: NOT_JSON,
+                msg: 'no opening parenthesis'
+              })
               port.disconnect() ;
               return ;
             }
@@ -58,7 +63,10 @@ chrome.runtime.onConnect.addListener(function(port) {
             var firstBit = removeComments( text.substring(0,indexOfParen) ).trim() ;
             if ( ! firstBit.match(/^[a-zA-Z_$][\.\[\]'"0-9a-zA-Z_$]*$/) ) {
               // The 'firstBit' is NOT a valid function identifier.
-              port.postMessage(['NOT JSON', 'first bit not a valid function name']) ;
+              port.postMessage({
+                type: NOT_JSON,
+                msg: 'first bit not a valid function name'
+              })
               // port.disconnect() ;
               return ;
             }
@@ -66,7 +74,10 @@ chrome.runtime.onConnect.addListener(function(port) {
           // Find last parenthesis (exit if none)
             var indexOfLastParen ;
             if ( ! (indexOfLastParen = text.lastIndexOf(')') ) ) {
-              port.postMessage(['NOT JSON', 'no closing paren']) ;
+              port.postMessage({
+                type: NOT_JSON,
+                msg: 'no closing paren'
+              })
               port.disconnect() ;
               return ;
             }
@@ -74,7 +85,10 @@ chrome.runtime.onConnect.addListener(function(port) {
           // Check that what's after the last parenthesis is just whitespace, comments, and possibly a semicolon (exit if anything else)
             var lastBit = removeComments(text.substring(indexOfLastParen+1)).trim() ;
             if ( lastBit !== "" && lastBit !== ';' ) {
-              port.postMessage(['NOT JSON', 'last closing paren followed by invalid characters']) ;
+              port.postMessage({
+                type: NOT_JSON,
+                msg: 'last closing paren followed by invalid characters'
+              })
               port.disconnect() ;
               return ;
             }
@@ -90,7 +104,10 @@ chrome.runtime.onConnect.addListener(function(port) {
             catch (e2) {
               // Just some other text that happens to be in a function call.
               // Respond as not JSON, and exit
-                port.postMessage(['NOT JSON', 'looks like a function call, but the parameter is not valid JSON']) ;
+                port.postMessage({
+                  type: NOT_JSON,
+                  msg: 'looks like a function call, but the parameter is not valid JSON'
+                })
                 return ;
             }
 
@@ -101,19 +118,28 @@ chrome.runtime.onConnect.addListener(function(port) {
 
       // Ensure it's not a number or string (technically valid JSON, but no point prettifying it)
         if (typeof obj !== 'object' && typeof obj !== 'array') {
-          port.postMessage(['NOT JSON', 'technically JSON but not an object or array']) ;
+          port.postMessage({
+            type: NOT_JSON,
+            msg: 'technically JSON but not an object or array'
+          })
           port.disconnect() ;
           return ;
         }
 
       // And send it the message to confirm that we're now formatting (so it can show a spinner)
-        port.postMessage(['FORMATTING' /*, JSON.stringify(localStorage)*/]) ;
+        // port.postMessage(['FORMATTING' /*, JSON.stringify(localStorage)*/]) ;
+        port.postMessage({type: FORMATTING})
 
       // Do formatting
         var html = jsonObjToHTML(obj, jsonpFunctionName) ;
 
       // Post the HTML string to the content script
-        port.postMessage([FORMATTED, html, validJsonText]) ;
+        // port.postMessage([FORMATTED, html, validJsonText]) ;
+        port.postMessage({
+          type: FORMATTED,
+          html,
+          validJsonText
+        })
 
       // Disconnect
         // port.disconnect() ;

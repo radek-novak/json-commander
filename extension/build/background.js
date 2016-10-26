@@ -92,7 +92,10 @@
 	        // Find where the first paren is (and exit if none)
 	        var indexOfParen;
 	        if (!(indexOfParen = text.indexOf('('))) {
-	          port.postMessage(['NOT JSON', 'no opening parenthesis']);
+	          port.postMessage({
+	            type: _constants.NOT_JSON,
+	            msg: 'no opening parenthesis'
+	          });
 	          port.disconnect();
 	          return;
 	        }
@@ -101,7 +104,10 @@
 	        var firstBit = (0, _createHtml.removeComments)(text.substring(0, indexOfParen)).trim();
 	        if (!firstBit.match(/^[a-zA-Z_$][\.\[\]'"0-9a-zA-Z_$]*$/)) {
 	          // The 'firstBit' is NOT a valid function identifier.
-	          port.postMessage(['NOT JSON', 'first bit not a valid function name']);
+	          port.postMessage({
+	            type: _constants.NOT_JSON,
+	            msg: 'first bit not a valid function name'
+	          });
 	          // port.disconnect() ;
 	          return;
 	        }
@@ -109,7 +115,10 @@
 	        // Find last parenthesis (exit if none)
 	        var indexOfLastParen;
 	        if (!(indexOfLastParen = text.lastIndexOf(')'))) {
-	          port.postMessage(['NOT JSON', 'no closing paren']);
+	          port.postMessage({
+	            type: _constants.NOT_JSON,
+	            msg: 'no closing paren'
+	          });
 	          port.disconnect();
 	          return;
 	        }
@@ -117,7 +126,10 @@
 	        // Check that what's after the last parenthesis is just whitespace, comments, and possibly a semicolon (exit if anything else)
 	        var lastBit = (0, _createHtml.removeComments)(text.substring(indexOfLastParen + 1)).trim();
 	        if (lastBit !== "" && lastBit !== ';') {
-	          port.postMessage(['NOT JSON', 'last closing paren followed by invalid characters']);
+	          port.postMessage({
+	            type: _constants.NOT_JSON,
+	            msg: 'last closing paren followed by invalid characters'
+	          });
 	          port.disconnect();
 	          return;
 	        }
@@ -132,7 +144,10 @@
 	        } catch (e2) {
 	          // Just some other text that happens to be in a function call.
 	          // Respond as not JSON, and exit
-	          port.postMessage(['NOT JSON', 'looks like a function call, but the parameter is not valid JSON']);
+	          port.postMessage({
+	            type: _constants.NOT_JSON,
+	            msg: 'looks like a function call, but the parameter is not valid JSON'
+	          });
 	          return;
 	        }
 
@@ -143,19 +158,28 @@
 
 	      // Ensure it's not a number or string (technically valid JSON, but no point prettifying it)
 	      if ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) !== 'object' && typeof obj !== 'array') {
-	        port.postMessage(['NOT JSON', 'technically JSON but not an object or array']);
+	        port.postMessage({
+	          type: _constants.NOT_JSON,
+	          msg: 'technically JSON but not an object or array'
+	        });
 	        port.disconnect();
 	        return;
 	      }
 
 	      // And send it the message to confirm that we're now formatting (so it can show a spinner)
-	      port.postMessage(['FORMATTING' /*, JSON.stringify(localStorage)*/]);
+	      // port.postMessage(['FORMATTING' /*, JSON.stringify(localStorage)*/]) ;
+	      port.postMessage({ type: _constants.FORMATTING });
 
 	      // Do formatting
 	      var html = (0, _createHtml2.default)(obj, jsonpFunctionName);
 
 	      // Post the HTML string to the content script
-	      port.postMessage([_constants.FORMATTED, html, validJsonText]);
+	      // port.postMessage([FORMATTED, html, validJsonText]) ;
+	      port.postMessage({
+	        type: _constants.FORMATTED,
+	        html: html,
+	        validJsonText: validJsonText
+	      });
 
 	      // Disconnect
 	      // port.disconnect() ;
@@ -14505,6 +14529,9 @@
 	var SEND_JSON_STRING = exports.SEND_JSON_STRING = 'SEND_JSON_STRING';
 	var PORTNAME = exports.PORTNAME = 'PORTNAME';
 	var FORMATTED = exports.FORMATTED = 'FORMATTED';
+	var FORMATTING = exports.FORMATTING = 'FORMATTING';
+
+	var NOT_JSON = exports.NOT_JSON = 'NOT_JSON';
 
 /***/ },
 /* 38 */

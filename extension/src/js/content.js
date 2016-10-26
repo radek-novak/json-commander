@@ -32,9 +32,8 @@ const main = (json) => {
 
   port.onMessage.addListener(function(msg) {
     console.log('msg from bg', msg);
-    if (msg[0] === FORMATTED) {
-      controlsHooks.inside.innerHTML = msg[1]
-      // document.getElementsByTagName('pre')[0].hidden = true
+    if (msg.type === FORMATTED) {
+      controlsHooks.inside.innerHTML = msg.html
       preTags = document.getElementsByTagName('pre')
 
       preTags[0].hidden = true

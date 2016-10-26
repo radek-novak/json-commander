@@ -90,9 +90,8 @@
 
 	  port.onMessage.addListener(function (msg) {
 	    console.log('msg from bg', msg);
-	    if (msg[0] === _constants.FORMATTED) {
-	      controlsHooks.inside.innerHTML = msg[1];
-	      // document.getElementsByTagName('pre')[0].hidden = true
+	    if (msg.type === _constants.FORMATTED) {
+	      controlsHooks.inside.innerHTML = msg.html;
 	      preTags = document.getElementsByTagName('pre');
 
 	      preTags[0].hidden = true;
@@ -141,6 +140,9 @@
 	var SEND_JSON_STRING = exports.SEND_JSON_STRING = 'SEND_JSON_STRING';
 	var PORTNAME = exports.PORTNAME = 'PORTNAME';
 	var FORMATTED = exports.FORMATTED = 'FORMATTED';
+	var FORMATTING = exports.FORMATTING = 'FORMATTING';
+
+	var NOT_JSON = exports.NOT_JSON = 'NOT_JSON';
 
 /***/ },
 
