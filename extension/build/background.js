@@ -86,7 +86,8 @@
 	        } catch (jsonpathError) {
 	          console.error(jsonpathError);
 	          port.postMessage({
-	            type: _constants.ERROR_JSONPATH
+	            type: _constants.ERROR_JSONPATH,
+	            errorText: '"' + msg.inputJsonPath + '" isn\'t a valid jsonpath'
 	          });
 	          return;
 	        }

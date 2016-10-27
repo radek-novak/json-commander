@@ -5,7 +5,8 @@ import {
   MESSAGE,
   SEND_JSON_STRING,
   PORTNAME,
-  FORMATTED
+  FORMATTED,
+  ERROR_JSONPATH
 } from './constants'
 import expanderClick from './content/expanderClick'
 
@@ -31,12 +32,16 @@ const main = (json) => {
   })
 
   port.onMessage.addListener(function(msg) {
-    console.log('msg from bg', msg);
-    if (msg.type === FORMATTED) {
-      controlsHooks.inside.innerHTML = msg.html
-      preTags = document.getElementsByTagName('pre')
-
-      preTags[0].hidden = true
+    switch(msg.type) {
+      case FORMATTED:
+        controlsHooks.inside.innerHTML = msg.html
+        preTags = document.getElementsByTagName('pre')
+        controlsHooks.errorMsg.innerText = ''
+        preTags[0].hidden = true
+        break;
+      case ERROR_JSONPATH:
+        controlsHooks.errorMsg.innerText = msg.errorText
+        break;
     }
   })
 

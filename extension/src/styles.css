@@ -72,3 +72,8 @@ html {
   padding-left: 1rem;
   font-family: monospace;
 }
+.controls__error {
+  color: #c55;
+  font-size: 0.8rem;
+  line-height: 1.2rem;
+}

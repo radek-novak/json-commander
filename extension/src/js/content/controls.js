@@ -21,6 +21,7 @@ const template = `
         placeholder="jsonpath"
         autofocus
       />
+      <i class="controls__error"></i>
       <button class="controls__submit">submit</button>
     </form>
 
@@ -40,7 +41,8 @@ const controls = () => {
     input: document.getElementById('controls__input'),
     inside: document.getElementById('orig'),
     switcherRaw: document.getElementById('controls__raw'),
-    switcherFormatted: document.getElementById('controls__formatted')
+    switcherFormatted: document.getElementById('controls__formatted'),
+    errorMsg: document.querySelector('.controls__error')
   }
 }
 

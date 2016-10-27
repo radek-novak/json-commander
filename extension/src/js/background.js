@@ -45,7 +45,8 @@ chrome.runtime.onConnect.addListener(function(port) {
         } catch (jsonpathError) {
           console.error(jsonpathError)
           port.postMessage({
-            type: ERROR_JSONPATH
+            type: ERROR_JSONPATH,
+            errorText: `"${msg.inputJsonPath}" isn't a valid jsonpath`
           })
           return
         }
