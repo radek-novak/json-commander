@@ -9,7 +9,7 @@ import {
 } from './constants'
 import expanderClick from './content/expanderClick'
 
-// var css = require('../content')
+
 let preTags = null
 
 const main = (json) => {
