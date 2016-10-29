@@ -149,7 +149,8 @@ chrome.runtime.onConnect.addListener(function(port) {
         port.postMessage({
           type: FORMATTED,
           html,
-          validJsonText
+          validJsonText,
+          inputJsonPath: msg.inputJsonPath
         })
 
       // Disconnect

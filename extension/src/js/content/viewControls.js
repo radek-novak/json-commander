@@ -12,6 +12,7 @@ const template = `
         <label for="controls__formatted">formatted</label>
       </div class="col-50">
     </div>
+    <select class="controls__history" size="5"></select>
     <form id="controls__form">
       <input
         id="controls__input"
@@ -39,6 +40,7 @@ const controls = () => {
   return {
     form: document.getElementById('controls__form'),
     input: document.getElementById('controls__input'),
+    history: document.querySelector('.controls__history'),
     inside: document.getElementById('orig'),
     switcherRaw: document.getElementById('controls__raw'),
     switcherFormatted: document.getElementById('controls__formatted'),
