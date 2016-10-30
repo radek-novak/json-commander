@@ -1,13 +1,9 @@
 const css = require('../../styles/style')
 
-const template = `
-  <style>
-  ${css}
-  </style>
-`
-
 const injectStyles = () => {
-  document.head.insertAdjacentHTML( 'afterbegin', template)
+  const styleEl = document.createElement('style')
+  styleEl.innerText = css
+  document.head.appendChild(styleEl)
 }
 
 export default injectStyles
