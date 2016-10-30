@@ -7,7 +7,7 @@ const template = `
 `
 
 const injectStyles = () => {
-  document.body.insertAdjacentHTML( 'afterbegin', template)
+  document.head.insertAdjacentHTML( 'afterbegin', template)
 }
 
 export default injectStyles

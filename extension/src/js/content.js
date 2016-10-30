@@ -18,7 +18,7 @@ import injectStyles from './content/injectStyles'
 const main = (json) => {
   const port = chrome.extension.connect({name: PORTNAME})
   if (!port) return
-  // chrome.storage.sync.clear()
+
   const postMessage = (msg) => {
     port.postMessage(msg)
   }
@@ -31,15 +31,12 @@ const main = (json) => {
   injectStyles()
 
   injectApp(port, jsonString, (hideOrig) => () => {
-    console.log('change formatted', hideOrig);
-
     const formatted = document.getElementById('formatted')
 
     preTag.hidden = hideOrig
     formatted.hidden = !preTag.hidden
 
   }, (html) => {
-      console.log('inserthtml', html);
       const formatted = document.getElementById('formatted')
 
       if (typeof html === 'string')

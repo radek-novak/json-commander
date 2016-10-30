@@ -11,6 +11,7 @@ import {
 } from '../../constants'
 import JsonPathForm from './JsonPathForm'
 import SwitchRaw from './SwitchRaw'
+import chromeStorage from '../chromeStorage'
 
 export default class App extends Component {
   constructor(props) {
@@ -37,16 +38,10 @@ export default class App extends Component {
           insertHtml(msg.html)
           this.setState(Object.assign({}, this.state, {errorMsg: ''}))
 
-          chrome.storage.sync.get(HISTORY_STORAGE, (history = { [HISTORY_STORAGE]: '' }) => {
-            const oldHist = history.hasOwnProperty(HISTORY_STORAGE) ? history[HISTORY_STORAGE] : ''
-            const oldHistSplit = oldHist.split(HISTORY_SEPARATOR)
-            const newHistSplit = [...(new Set(oldHistSplit).add(msg.inputJsonPath))]
-            const newHist = newHistSplit.join(HISTORY_SEPARATOR)
-
-            chrome.storage.sync.set({[HISTORY_STORAGE]: newHist}, () => {
-              this.setState(Object.assign({}, this.state, {history: newHistSplit}))
-            })
+          chromeStorage(msg.inputJsonPath, (newHistSplit) => {
+            this.setState(Object.assign({}, this.state, {history: newHistSplit}))
           })
+
           break;
         case ERROR_JSONPATH:
           this.setState(Object.assign({}, this.state, {errorMsg: msg.errorText}))
