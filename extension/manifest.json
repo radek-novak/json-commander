@@ -6,8 +6,8 @@
   "homepage_url": "http://github.com",
   "minimum_chrome_version": "21",
   "icons": {
-       "128": "icons/128.png",
-       "32": "icons/32.png"
+       "128": "icons/icon_128.png",
+       "32": "icons/icon_32.png"
   },
   "background": {
     "scripts": ["build/background.js"]
