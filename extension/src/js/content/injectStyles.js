@@ -1,4 +1,4 @@
-const css = require('../../styles')
+const css = require('../../styles/style')
 
 const template = `
   <style>

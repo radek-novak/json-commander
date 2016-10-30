@@ -1,0 +1,20 @@
+@import "formatted";
+@import "controls";
+
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+[hidden] {
+  display: none !important ;
+}
+span {
+  white-space: pre-wrap ;
+}
+* {
+  -webkit-font-smoothing: antialiased;
+}

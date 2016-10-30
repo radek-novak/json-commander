@@ -24,11 +24,12 @@ module.exports = {
             exclude: /(node_modules|bower_components)/,
             loaders: ['babel'],
           },
-          // {
-          //   test: /\.scss$/,
-          //   exclude: /(node_modules|bower_components)/,
-          //   loaders: ["style", "css", "sass"]
-          // },
+          {
+            test: /\.scss$/,
+            exclude: /(node_modules|bower_components)/,
+            loaders: ["raw", "sass"]
+            // loaders: ["style", "css", "sass"]
+          },
           {
             test: /\.json/,
             loaders: ["json"]

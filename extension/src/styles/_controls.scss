@@ -1,0 +1,72 @@
+.controls {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 250px;
+  height: 100%;
+  font-family: Helvetica, Arial, sans-serif;
+  z-index: 10;
+  padding-right: 0.1rem;
+}
+.controls__raw-switch {
+  margin: 1rem 0 0.5rem;
+  display: flex
+}
+.col-50 {
+  flex-grow: 1;
+  flex-basis: 0;
+  text-align: center;
+}
+.controls__raw-switch input {
+  display: none;
+}
+.controls label {
+  cursor: pointer;
+  color: #777;
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+}
+.controls label:hover {
+  color: #000;
+}
+.controls input:checked + label {
+  text-decoration: underline;
+  cursor: default;
+}
+.controls input:checked + label:hover {
+  color: #777;
+}
+
+.controls__input, .controls__submit {
+  width: 100%;
+  display: block;
+  background: none;
+  border-radius: 0;
+  height: 2rem;
+  line-height: 2rem;
+  margin: 0.2rem 0;
+  border: 1px solid #333;
+  outline: 0;
+
+}
+
+.controls__input:focus,
+.controls__submit:focus {
+  border-color: #080;
+
+}
+.controls__input {
+  padding-left: 1rem;
+  font-family: monospace;
+}
+.controls__error {
+  color: #c55;
+  font-size: 0.8rem;
+  line-height: 1.2rem;
+}
+
+.controls__history {
+  width: 100%;
+  outline: 0;
+}

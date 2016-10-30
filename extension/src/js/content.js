@@ -14,7 +14,6 @@ import expanderClick from './content/expanderClick'
 import injectApp from './content/injectApp'
 import injectStyles from './content/injectStyles'
 
-
 const main = (json) => {
   const port = chrome.extension.connect({name: PORTNAME})
   if (!port) return
