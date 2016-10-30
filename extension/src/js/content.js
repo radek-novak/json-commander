@@ -11,8 +11,9 @@ import {
   HISTORY_SEPARATOR
 } from './constants'
 import expanderClick from './content/expanderClick'
+import injectApp from './content/injectApp'
+import injectStyles from './content/injectStyles'
 
-let preTags = null
 
 const main = (json) => {
   const port = chrome.extension.connect({name: PORTNAME})
@@ -21,82 +22,42 @@ const main = (json) => {
   const postMessage = (msg) => {
     port.postMessage(msg)
   }
+  const preTags = document.getElementsByTagName('pre')
+  const preTag = preTags[0]
 
-  // inject html for controls and return hooks
-  const controlsHooks = viewControls()
+  const jsonString = preTag.innerText
+  preTag.hidden = true
 
-  controlsHooks.form.addEventListener('submit', e => {
-    e.preventDefault()
+  injectStyles()
 
-    postMessage({
-      type: SEND_JSON_STRING,
-      text: json,
-      length: json.length,
-      inputJsonPath: controlsHooks.input.value || '$'
-    })
-  })
+  injectApp(port, jsonString, (hideOrig) => () => {
+    console.log('change formatted', hideOrig);
 
-  port.onMessage.addListener(function(msg) {
-    switch(msg.type) {
-      case FORMATTED:
-        controlsHooks.inside.innerHTML = msg.html
-        preTags = document.getElementsByTagName('pre')
-        controlsHooks.errorMsg.innerText = ''
-        preTags[0].hidden = true
+    const formatted = document.getElementById('formatted')
 
-        chrome.storage.sync.get(HISTORY_STORAGE, (history = { [HISTORY_STORAGE]: '' }) => {
-          const oldHist = history.hasOwnProperty(HISTORY_STORAGE) ? history[HISTORY_STORAGE] : ''
-          const oldHistSplit = oldHist.split(HISTORY_SEPARATOR)
-          const newHistSplit = [...(new Set(oldHistSplit).add(msg.inputJsonPath))]
-          const newHist = newHistSplit.join(HISTORY_SEPARATOR)
+    preTag.hidden = hideOrig
+    formatted.hidden = !preTag.hidden
 
-          chrome.storage.sync.set({[HISTORY_STORAGE]: newHist}, () => {
-            controlsHooks.history.innerHTML = newHistSplit.map(jp => `<option>${jp}</input>`).join('')
-          })
-        })
-        break;
-      case ERROR_JSONPATH:
-        controlsHooks.errorMsg.innerText = msg.errorText
-        break;
+  }, (html) => {
+      console.log('inserthtml', html);
+      const formatted = document.getElementById('formatted')
+
+      if (typeof html === 'string')
+        formatted.innerHTML = html
     }
-  })
-
-
-  controlsHooks.switcherRaw.addEventListener('change', (e) => {
-    controlsHooks.inside.hidden = true
-    document.querySelector('pre').hidden = false
-  })
-
-  controlsHooks.switcherFormatted.addEventListener('change', (e) => {
-    controlsHooks.inside.hidden = false
-    document.querySelector('pre').hidden = true
-  })
-
-  controlsHooks.history.addEventListener('change', (e) => {
-    controlsHooks.input.value = e.target.value
-  })
+  )
 
   document.addEventListener(
     'click',
     expanderClick,
     false
   )
-
-
-  postMessage({
-    type: SEND_JSON_STRING,
-    text: json,
-    length: json.length,
-    inputJsonPath: controlsHooks.input.value || '$'
-  })
 }
 
 window.onload = () => {
   const jsonString = getJson()
 
   if (jsonString) {
-
     main(jsonString)
-
   }
 }

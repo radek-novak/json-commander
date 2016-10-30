@@ -10,7 +10,7 @@ const template = `
       <div class="col-50">
         <input type="radio" name="switcher" value="formatted" id="controls__formatted" checked />
         <label for="controls__formatted">formatted</label>
-      </div class="col-50">
+      </div>
     </div>
     <select class="controls__history" size="5"></select>
     <form id="controls__form">
