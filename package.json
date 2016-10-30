@@ -6,7 +6,8 @@
   "scripts": {
     "test": "babel-tape-runner test/**/*.js",
     "start": "wr webpack extension/src",
-    "build": "webpack"
+    "build": "webpack",
+    "bundle": "npm run build && zip -r json-commander.zip extension -x \\*extension/src\\*"
   },
   "author": "Radek Novak <radek.novak.cze@gmail.com> (http://radek-novak.com/)",
   "license": "MIT",

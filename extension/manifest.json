@@ -1,9 +1,9 @@
 {
-  "name": "JSON ",
-  "version": "0.0.0",
+  "name": "JSON Commander",
+  "version": "0.0.1",
   "manifest_version": 2,
   "description": "",
-  "homepage_url": "http://github.com",
+  "homepage_url": "https://github.com/radek-novak/json-commander",
   "minimum_chrome_version": "21",
   "icons": {
        "128": "icons/icon_128.png",
