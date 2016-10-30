@@ -21,12 +21,14 @@ export default class App extends Component {
       input: '',
       history: [],
       errorMsg: '',
-      isFormatted: true
+      isFormatted: true,
+      showControls: true
     }
 
     this.submit = this.submit.bind(this)
+    this.initMessage = this.initMessage.bind(this)
     this.clearHistory = this.clearHistory.bind(this)
-    this.changeFormatted = this.props.changeFormatted.bind(this)
+    this.changeFormatted = this.changeFormatted.bind(this)
     this.insertHtml = this.props.insertHtml.bind(this)
   }
 
@@ -50,6 +52,12 @@ export default class App extends Component {
           break;
       }
     }.bind(this))
+
+    this.initMessage()
+  }
+
+  initMessage() {
+    const { port, jsonString } = this.props
 
     port.postMessage({
       type: SEND_JSON_STRING,
@@ -79,6 +87,17 @@ export default class App extends Component {
     })
   }
 
+  changeFormatted(hideOrig) {
+    return function() {
+      this.setState({
+        showControls: hideOrig
+      })
+
+      this.props.changeFormatted(hideOrig)()
+      this.initMessage()
+    }.bind(this)
+  }
+
   render() {
     return (
       <aside className="controls">
@@ -86,11 +105,14 @@ export default class App extends Component {
           callback={this.changeFormatted}
           isFormatted={this.state.isFormatted}
         />
-        <JsonPathForm
-          {...this.state}
-          submit={this.submit}
-          clearHistory={this.clearHistory}
-        />
+        {this.state.showControls ?
+          <JsonPathForm
+            {...this.state}
+            submit={this.submit}
+            clearHistory={this.clearHistory}
+          />
+          :
+          null}
       </aside>
     )
   }
