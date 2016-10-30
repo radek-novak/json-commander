@@ -14,6 +14,7 @@ export default class JsonPathForm extends Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.select = this.select.bind(this)
+    this.clearHistory = this.props.clearHistory.bind(this)
   }
 
   willReceiveProps(nextProps) {
@@ -48,6 +49,7 @@ export default class JsonPathForm extends Component {
         <History
           historyList={history}
           change={this.select}
+          clearHistory={this.clearHistory}
         />
 
         <form id="controls__form" onSubmit={this.handleSubmit}>
@@ -72,6 +74,7 @@ JsonPathForm.propTypes = {
   input: PropTypes.string.isRequired,
   history: PropTypes.arrayOf(PropTypes.string).isRequired,
   errorMsg: PropTypes.string.isRequired,
-  submit: PropTypes.func.isRequired
+  submit: PropTypes.func.isRequired,
+  clearHistory: PropTypes.func.isRequired
 
 }

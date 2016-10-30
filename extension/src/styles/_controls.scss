@@ -1,3 +1,7 @@
+$color: #777;
+$color-danger: #c55;
+$font-hacker: Courier, monotype;
+
 .controls {
   position: fixed;
   right: 0;
@@ -9,7 +13,7 @@
   padding-right: 0.1rem;
 }
 .controls__raw-switch {
-  margin: 1rem 0 0.5rem;
+  margin: 1rem 0 1.5rem;
   display: flex
 }
 .col-50 {
@@ -20,22 +24,22 @@
 .controls__raw-switch input {
   display: none;
 }
-.controls label {
+.controls__raw-switch label {
   cursor: pointer;
-  color: #777;
+  color: $color;
   display: inline-block;
   width: 100%;
   text-align: center;
 }
-.controls label:hover {
+.controls__raw-switch label:hover {
   color: #000;
 }
-.controls input:checked + label {
+.controls__raw-switch input:checked + label {
   text-decoration: underline;
   cursor: default;
 }
-.controls input:checked + label:hover {
-  color: #777;
+.controls__raw-switch input:checked + label:hover {
+  color: $color;
 }
 
 .controls__input, .controls__submit {
@@ -47,8 +51,6 @@
   line-height: 2rem;
   margin: 0.2rem 0;
   border: 1px solid #333;
-  outline: 0;
-
 }
 
 .controls__input:focus,
@@ -58,15 +60,37 @@
 }
 .controls__input {
   padding-left: 1rem;
-  font-family: monospace;
+  font-family: $font-hacker;
 }
 .controls__error {
-  color: #c55;
+  color: $color-danger;
   font-size: 0.8rem;
   line-height: 1.2rem;
 }
 
 .controls__history {
   width: 100%;
-  outline: 0;
+  overflow-y: auto;
+  font-family: $font-hacker;
+}
+
+.controls__history-header {
+  display: flex;
+  justify-content: space-between;
+}
+.controls__history-label {
+  font-size: 0.7em;
+  color: $color;
+}
+.controls__clear-history {
+  font-size: 0.7em;
+  border: none;
+  background: none;
+  border-radius: 0;
+  color: $color;
+
+  &:hover {
+    color: $color-danger;
+    cursor: pointer;
+  }
 }

@@ -4,14 +4,14 @@ import React, {
 } from 'react'
 import {
   FORMATTED,
-  HISTORY_STORAGE,
-  HISTORY_SEPARATOR,
   ERROR_JSONPATH,
   SEND_JSON_STRING
 } from '../../constants'
 import JsonPathForm from './JsonPathForm'
 import SwitchRaw from './SwitchRaw'
 import chromeStorage from '../chromeStorage'
+import { clear } from '../chromeStorage'
+
 
 export default class App extends Component {
   constructor(props) {
@@ -25,6 +25,7 @@ export default class App extends Component {
     }
 
     this.submit = this.submit.bind(this)
+    this.clearHistory = this.clearHistory.bind(this)
     this.changeFormatted = this.props.changeFormatted.bind(this)
     this.insertHtml = this.props.insertHtml.bind(this)
   }
@@ -58,6 +59,15 @@ export default class App extends Component {
     })
   }
 
+  clearHistory() {
+    if (confirm('Delete history?')) {
+      clear()
+      this.setState({
+        history: []
+      })
+    }
+  }
+
   submit(input) {
     const { port, jsonString } = this.props
 
@@ -79,6 +89,7 @@ export default class App extends Component {
         <JsonPathForm
           {...this.state}
           submit={this.submit}
+          clearHistory={this.clearHistory}
         />
       </aside>
     )
